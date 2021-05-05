@@ -12,30 +12,26 @@ class WordSearch {
   find(words) {
     let result = {};
 
-    for (let gridIndex = 0; gridIndex < this.grid.length; gridIndex++) {
-      let row = this.grid[gridIndex]; //clojuremt wld be the row
-      let word = words[0]; //word ur searching for
-      let firstChara = row.indexOf(word);
-      let lastChara = firstChara + word.length;
+    for (let wordsIndex = 0; wordsIndex < words.length; wordsIndex++) {
+      let word = words[wordsIndex]; //word ur searching for
 
-      console.log("hi");
-      console.log(row);
-      console.log(row.includes(word));
-      if (row.includes(word)) {
-        console.log("i'm here");
-        result[word] = {
-          start: [gridIndex + 1, firstChara + 1],
-          end: [gridIndex + 1, lastChara],
-        };
-        console.log(result[word]);
-        break; //exits the loop if that condition is true
-      } else {
-        console.log("else statement");
-        console.log(result);
-        result[word] = undefined;
+      for (let gridIndex = 0; gridIndex < this.grid.length; gridIndex++) {
+        let row = this.grid[gridIndex];
+        let firstChara = row.indexOf(word);
+        let lastChara = firstChara + word.length;
+
+        if (row.includes(word)) {
+          result[word] = {
+            start: [gridIndex + 1, firstChara + 1],
+            end: [gridIndex + 1, lastChara],
+          };
+          console.log(result[word]);
+          break; //exits the loop if that condition is true
+        } else {
+          result[word] = undefined;
+        }
       }
     }
-
     return result;
   }
 }
