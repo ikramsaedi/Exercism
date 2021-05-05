@@ -28,6 +28,7 @@ class WordSearch {
           end: [gridIndex + 1, lastChara],
         };
         console.log(result[word]);
+        break; //exits the loop if that condition is true
       } else {
         console.log("else statement");
         console.log(result);
