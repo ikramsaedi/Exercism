@@ -69,7 +69,7 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_one_match_case_insensitive_flag
-    skip
+    
     pattern = "FORBIDDEN"
     flags = ["-i"]
     files = ["paradise-lost.txt"]
@@ -81,7 +81,6 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_one_match_print_file_names_flag
-    skip
     pattern = "Forbidden"
     flags = ["-l"]
     files = ["paradise-lost.txt"]
@@ -93,7 +92,6 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_one_match_match_entire_lines_flag
-    skip
     pattern = "With loss of Eden, till one greater Man"
     flags = ["-x"]
     files = ["paradise-lost.txt"]
@@ -117,7 +115,6 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_several_matches_no_flags
-    skip
     pattern = "may"
     flags = []
     files = ["midsummer-night.txt"]
@@ -131,7 +128,6 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_several_matches_print_line_numbers_flag
-    skip
     pattern = "may"
     flags = ["-n"]
     files = ["midsummer-night.txt"]
@@ -157,7 +153,6 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_several_matches_case_insensitive_flag
-    skip
     pattern = "ACHILLES"
     flags = ["-i"]
     files = ["iliad.txt"]
@@ -170,7 +165,6 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_several_matches_inverted_flag
-    skip
     pattern = "Of"
     flags = ["-v"]
     files = ["paradise-lost.txt"]
@@ -228,6 +222,10 @@ class GrepTest < Minitest::Test
     assert_equal expected, Grep.grep(pattern, flags, files)
   end
 
+
+
+
+  # ----------------
   def test_multiple_files_one_match_no_flags
     skip
     pattern = "Agamemnon"

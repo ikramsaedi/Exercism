@@ -18,46 +18,55 @@ module Grep
         file_names.each_with_index do |file_name, index|
             file = File.readlines(file_name, chomp: true) #gives an array of all the lines
             
-
             file.each_with_index do |line, index|
-                if flags.include?("-i")
-                    if line.downcase.include?(pattern.downcase)
-                        matching_lines.push(line)
-                    end
-                elsif flags.include?("-l")
-                    if line.include?(pattern)
-                        matching_lines.push(file_name)
-                    end
-                elsif flags.include?("-n")
-                    if line.include?(pattern)
-                        matching_lines.push("#{index + 1}:#{line}")
-                    end
-                elsif flags.include?("-x")
-                    if line == pattern
-                        matching_lines.push(line)
-                    end
-                elsif flags.include?("-v")
-                    if line.include?(pattern)
-                        file2 = file.delete(line)
-                        matching_lines.push(file2)
+                if flags.length > 0
+                    if flag_handler(pattern, flags, line, file_name, file, index) != nil
+                        matching_lines.push(flag_handler(pattern, flags, line, file_name, file, index))
+                        puts "hi"
                     end
                 elsif line.include?(pattern)
                     matching_lines.push(line)
+                    puts "bye"
                 end
 
             end
         end
-
-         matching_lines
-
-        return matching_lines.join("\n")
+        print matching_lines
+        return matching_lines.join("\n").rstrip
     end
 
-    # def doesLineMatchEntirely(pattern, flags, line)
-    #     if flags.include?("x") && line == pattern
-    #         return line
-
-    #     end
-    # end
+    def self.flag_handler(pattern, flags, line, file_name, file, index)
+        match = nil
+        if flags.include?("-x") && line == pattern
+            match = line
+        end
+        if flags.include?("-i")
+            if line.downcase.include?(pattern.downcase)
+                match =line
+            end
+        end
+        if flags.include?("-n")
+            if line.include?(pattern)
+                match = "#{index + 1}:#{line}"
+            end
+        end
+        if flags.include?("-v")
+            if line.include?(pattern)
+                file2 = file.delete(line)
+                match = file2
+            end
+        end
+        if flags.include?("-l")
+            if line.include?(pattern)
+                match = file_name
+            end
+        end
+        if !match.nil?
+            
+            return match
+        else
+            #
+        end
+    end
 end
 
