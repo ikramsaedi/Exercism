@@ -49,19 +49,24 @@ module RunLengthEncoding
     def self.decode(string)
         string_array = string.split("")
         new_string = ""
+        current_str = ""
+
         string_array.each_with_index do |chara, index|
-            if (/\d/ =~ chara) != nil #if its a number
-                puts chara
-                repeated_charas_array = Array.new(chara.to_i, string_array[index + 1])
+            if (/\d/ =~ chara) != nil #if number
+                current_str << chara
+            elsif (/\d/ =~ chara) == nil && (/\d/ =~ string_array[index - 1]) != nil #if letter
+                repeated_charas_array = Array.new(current_str.to_i, chara) #this is dependent on there being a number
                 repeated_charas_string = repeated_charas_array.join
                 new_string << repeated_charas_string
-            elsif (/\d/ =~ chara) == nil && (/\d/ =~ string_array[index - 1]) == nil
+                current_str = ""
+            else 
                 new_string << chara
+                current_str = ""
             end
-        end 
-        puts new_string
+        end
+        return new_string
     end
 end
 
-RunLengthEncoding::decode("2a3b4c")
+RunLengthEncoding::decode("2A3B4C")
 #4i, 2k, 2r, 2a, m
