@@ -12,26 +12,26 @@ module Luhn
             digits = []
 
             numarray.each do |el| #check if its a number then push it into an array
-                if (el =~ /\d/) != nil #check if digit
+                if el =~ /\d/ #check if digit
                     digits.push(el)
-                elsif (el =~ /\D/) !=nil && (el =~ /\s/)==nil #check if not a digit and specifically not a space
+                elsif el =~ /\D/ && !(el =~ /\s/) #check if not a digit and specifically not a space
                     return false
                 end
             end
 
-            if digits.length == 1
-                return false
-            end
+            return false if digits.length == 1
 
             digits_rev = digits.reverse
 
             digits_to_sum = []
 
             digits_rev.each_with_index do |digit, index|
-                    digit_int = digit.to_i 
-                    if index % 2 == 1 && digit_int * 2 < 10 && index !=0 #index % 2 == 1 gives us every second index
+
+                    digit_int = digit.to_i
+
+                    if index.odd? && digit_int * 2 < 10 && index !=0 #index % 2 == 1 gives us every second index
                         digits_to_sum.push(digit_int * 2)
-                    elsif index % 2 == 1 && (digit_int * 2) >= 10 && index !=0
+                    elsif index.odd? && (digit_int * 2) >= 10 && index !=0
                         digits_to_sum.push(digit_int*2 - 9)
                     else
                         digits_to_sum.push(digit_int)
@@ -39,14 +39,8 @@ module Luhn
             end
 
             sum = 0
-            digits_to_sum.each do |digit|
-                sum += digit
-            end
+            digits_to_sum.each {|digit| sum += digit}
 
-            if sum % 10 == 0
-                return true
-            else 
-                return false
-            end
+            sum % 10 == 0 ? true : false
     end
 end

@@ -7,6 +7,18 @@ class WordSearch {
   constructor(grid, word) {
     this.grid = grid;
     this.word = word;
+    this.verticalGrid = [];
+
+    for (let i = 0; i < this.grid.length; i++) {
+      let row = this.grid[i];
+      let characters = row.split("");
+
+      for (let charaIndex = 0; charaIndex < characters.length; charaIndex++) {
+        this.verticalGrid[charaIndex].push(characters[charaIndex]);
+      }
+    }
+
+    //join up each row of vertical grid into a string
   }
 
   find(words) {
@@ -19,14 +31,21 @@ class WordSearch {
         let row = this.grid[gridIndex];
         let firstChara = row.indexOf(word);
         let lastChara = firstChara + word.length;
+        let reversedWord = reverse(word);
 
         if (row.includes(word)) {
           result[word] = {
             start: [gridIndex + 1, firstChara + 1],
             end: [gridIndex + 1, lastChara],
           };
-          console.log(result[word]);
+          //console.log(result[word]);
           break; //exits the loop if that condition is true
+        } else if (row.includes(reversedWord)) {
+          result[word] = {
+            start: [gridIndex + 1, lastChara + 1],
+            end: [gridIndex + 1, firstChara + 2],
+          };
+          break;
         } else {
           result[word] = undefined;
         }
@@ -35,5 +54,13 @@ class WordSearch {
     return result;
   }
 }
-
+function reverse(word) {
+  let splitWord = word.split("");
+  let reversedWord = splitWord.reverse();
+  return reversedWord.join("");
+}
 export default WordSearch;
+
+abchef;
+abceef;
+abcl;
