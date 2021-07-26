@@ -9,9 +9,13 @@ To get started with TDD, see the `README.md` file in your
 module RunLengthEncoding
     def self.encode(string)
         string_array = string.split("")
-
+        print string_array
+         if string_array == []
+            return string
+         end
         count = 0 #this will default to 0 after the next has been executed
         chara_expected = string_array[0]
+        print chara_expected #chara_expected is the problem, it becomes nil here
         new_string = ""
 
         string_array.each_with_index do |chara, index|
@@ -25,12 +29,12 @@ module RunLengthEncoding
                 elsif 
                     count_and_chara = count.to_s << chara_expected
                 end
-                
                 new_string << count_and_chara
-                #puts new_string
                 count = 1
                 chara_expected = chara
-           end
+            
+            end
+            
         end
 
         if count == 1
@@ -38,40 +42,26 @@ module RunLengthEncoding
         elsif
             new_string << count.to_s << chara_expected
         end
-        puts new_string
-        
+        #puts new_string
+        return new_string
     end
 
-    # def self.encode(string)
-    #     string_array = string.split("")
-
-    #     string_array.each_with_index do |chara, index|
-    #         count = 0
-    #         stored_index = 0
-
-    #         if chara == string_array[index + 1] 
-    #             for i2 in 0..string_array.length do
-    #                 if chara == string_array[i2]
-    #                     count += 1
-    #                     print count
-    #                     puts chara
-
-    #                 end
-    #             end
-
-    #             # stored_index = index
-    #             # next if index != count + stored_index
-    #         else 
-    #             #puts "bye"
-    #         end
-
-    #         count_and_chara = "#{count}#{chara}"
-
-    #         #puts count_and_chara
-
-    #     end
-    # end
+    def self.decode(string)
+        string_array = string.split("")
+        new_string = ""
+        string_array.each_with_index do |chara, index|
+            if (/\d/ =~ chara) != nil #if its a number
+                puts chara
+                repeated_charas_array = Array.new(chara.to_i, string_array[index + 1])
+                repeated_charas_string = repeated_charas_array.join
+                new_string << repeated_charas_string
+            elsif (/\d/ =~ chara) == nil && (/\d/ =~ string_array[index - 1]) == nil
+                new_string << chara
+            end
+        end 
+        puts new_string
+    end
 end
 
-RunLengthEncoding::encode("iiiikkrraam")
+RunLengthEncoding::decode("2a3b4c")
 #4i, 2k, 2r, 2a, m
