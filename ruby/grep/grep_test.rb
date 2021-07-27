@@ -45,7 +45,7 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_one_match_no_flags
-    # skip
+    
     pattern = "Agamemnon"
     flags = []
     files = ["iliad.txt"]
@@ -57,7 +57,7 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_one_match_print_line_numbers_flag
-    skip
+    
     pattern = "Forbidden"
     flags = ["-n"]
     files = ["paradise-lost.txt"]
@@ -69,7 +69,6 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_one_match_case_insensitive_flag
-    
     pattern = "FORBIDDEN"
     flags = ["-i"]
     files = ["paradise-lost.txt"]
@@ -103,7 +102,6 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_one_match_multiple_flags
-    skip
     pattern = "OF ATREUS, Agamemnon, KIng of MEN."
     flags = ["-n", "-i", "-x"]
     files = ["iliad.txt"]
@@ -141,7 +139,6 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_several_matches_match_entire_lines_flag
-    skip
     pattern = "may"
     flags = ["-x"]
     files = ["midsummer-night.txt"]
@@ -165,6 +162,7 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_several_matches_inverted_flag
+    skip
     pattern = "Of"
     flags = ["-v"]
     files = ["paradise-lost.txt"]
@@ -180,7 +178,6 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_no_matches_various_flags
-    skip
     pattern = "Gandalf"
     flags = ["-n", "-l", "-x", "-i"]
     files = ["iliad.txt"]
@@ -192,7 +189,6 @@ class GrepTest < Minitest::Test
   end
 
   def test_one_file_one_match_file_flag_takes_precedence_over_line_flag
-    skip
     pattern = "ten"
     flags = ["-n", "-l"]
     files = ["iliad.txt"]
