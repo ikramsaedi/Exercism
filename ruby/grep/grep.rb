@@ -15,24 +15,28 @@ To get started with TDD, see the `README.md` file in your
 module Grep
     def self.grep(pattern, flags, file_names)
         matching_lines = []
+        print file_names
         file_names.each_with_index do |file_name, index|
             file = File.readlines(file_name, chomp: true) #gives an array of all the lines
             
             file.each_with_index do |line, index|
-                if flags.length > 0
+                if flags.length > 0 && file_names.length > 1
+                    if flag_handler(pattern, flags, line, file_name, file, index) != nil
+                        matching_lines.push("#{file_name}:#{flag_handler(pattern, flags, line, file_name, file, index)}")
+                    end
+                elsif flags.length > 0
                     if flag_handler(pattern, flags, line, file_name, file, index) != nil
                         matching_lines.push(flag_handler(pattern, flags, line, file_name, file, index))
-                        puts "hi"
                     end
-                elsif line.include?(pattern)
+                elsif line.include?(pattern) && file_names.length > 1
+                    matching_lines.push("#{file_name}:#{line}")
+                elsif line.include?(pattern) 
                     matching_lines.push(line)
-                    puts "bye"
                 end
 
             end
         end
-        print matching_lines
-        return matching_lines.join("\n").rstrip
+        return matching_lines.join("\n")
     end
 
     def self.flag_handler(pattern, flags, line, file_name, file, index)
@@ -50,8 +54,8 @@ module Grep
                 match = "#{index + 1}:#{line}"
             end
         end
-        if flags.include?("-v")
-            if !line.include?(pattern)
+        if flags.include?("-v") && line == pattern
+            if !line.include?(pattern) 
                 match = line
             end
         end
