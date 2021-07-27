@@ -51,9 +51,8 @@ module Grep
             end
         end
         if flags.include?("-v")
-            if line.include?(pattern)
-                file2 = file.delete(line)
-                match = file2
+            if !line.include?(pattern)
+                match = line
             end
         end
         if flags.include?("-l")
