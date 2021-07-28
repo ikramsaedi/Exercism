@@ -33,8 +33,10 @@ module Grep
 
     def self.line_pattern_comparison(flags, pattern, line)
         does_line_match = false
+        
         l = line.dup
         pat = pattern.dup
+
         if flags.include?("-i")
             l.downcase!
             pat.downcase!
@@ -52,26 +54,19 @@ module Grep
     end
     
     def self.match_result_formatter(flags, file_name, index, line, file_names, matching_lines) 
-        if file_names.length > 1 
-            match = "#{file_name}:"
-        else
-            match = ""
-        end
+        file_names.length > 1 ? match = "#{file_name}:" : match = ""
 
         if flags.include?("-l")
             match = file_name
     
         elsif flags.include?("-n")
             match << "#{index + 1}:#{line}"
-        end
-        
-        if (!flags.include?("-n") && !flags.include?("-l"))
+        else
             match << line
         end
 
-        if match != "" && !matching_lines.include?(file_name)
-            return match
-        end
+        return match if match != "" && !matching_lines.include?(file_name)
+
     end
 end
 
