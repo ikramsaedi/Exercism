@@ -20,55 +20,57 @@ module Grep
             file = File.readlines(file_name, chomp: true) #gives an array of all the lines
             
             file.each_with_index do |line, index|
-                if flags.length > 0 && file_names.length > 1
-                    if flag_handler(pattern, flags, line, file_name, file, index) != nil
-                        matching_lines.push("#{file_name}:#{flag_handler(pattern, flags, line, file_name, file, index)}")
-                    end
-                elsif flags.length > 0
-                    if flag_handler(pattern, flags, line, file_name, file, index) != nil
-                        matching_lines.push(flag_handler(pattern, flags, line, file_name, file, index))
-                    end
-                elsif line.include?(pattern) && file_names.length > 1
-                    matching_lines.push("#{file_name}:#{line}")
-                elsif line.include?(pattern) 
-                    matching_lines.push(line)
+                does_line_match = line_pattern_comparison(flags, pattern, line)
+        
+                if does_line_match 
+                    match = match_result_formatter(flags, file_name, index, line, file_names, matching_lines)
+                    matching_lines.push(match)
                 end
-
             end
         end
-        return matching_lines.join("\n")
+        return matching_lines.join("\n").rstrip
     end
 
-    def self.flag_handler(pattern, flags, line, file_name, file, index)
-        match = nil
-        if flags.include?("-x") && line == pattern
-            match = line
-        end
+    def self.line_pattern_comparison(flags, pattern, line)
+        does_line_match = false
+        l = line.dup
+        pat = pattern.dup
         if flags.include?("-i")
-            if line.downcase.include?(pattern.downcase)
-                match =line
-            end
+            l.downcase!
+            pat.downcase!
         end
-        if flags.include?("-n")
-            if line.include?(pattern)
-                match = "#{index + 1}:#{line}"
-            end
+        if flags.include?("-x")
+            does_line_match = l == pat
+        
+        elsif l.include?(pat) 
+            does_line_match = true
         end
-        if flags.include?("-v") && line == pattern
-            if !line.include?(pattern) 
-                match = line
-            end
+        if flags.include?("-v")
+            does_line_match = !does_line_match #if the line matches, it becomes false
         end
-        if flags.include?("-l")
-            if line.include?(pattern)
-                match = file_name
-            end
-        end
-        if !match.nil?
-            
-            return match
+        return does_line_match
+    end
+    
+    def self.match_result_formatter(flags, file_name, index, line, file_names, matching_lines) 
+        if file_names.length > 1 
+            match = "#{file_name}:"
         else
-            #
+            match = ""
+        end
+
+        if flags.include?("-l")
+            match = file_name
+    
+        elsif flags.include?("-n")
+            match << "#{index + 1}:#{line}"
+        end
+        
+        if (!flags.include?("-n") && !flags.include?("-l"))
+            match << line
+        end
+
+        if match != "" && !matching_lines.include?(file_name)
+            return match
         end
     end
 end
